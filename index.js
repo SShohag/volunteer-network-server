@@ -4,6 +4,8 @@ const cors = require('cors');
 require('dotenv').config();
 const MongoClient = require('mongodb').MongoClient;
 
+const ObjectId = require('mongodb').ObjectID;
+
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.qgdls.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 
 
@@ -52,14 +54,21 @@ client.connect(err => {
         })
        
     })
-
     app.get('/registeredUser', (req, res) => {
-        console.log(req.query.email);
+        // console.log(req.query.email);
         registrationCollection.find({})
         .toArray((err, documents)  => {
-            console.log(err, documents)
+            // console.log(err, documents)
            const user = documents.filter(item => item.details.email==req.query.email)
             res.send(user);
+        })
+    })
+
+    app.delete('/cancel/:id', (req, res) => {
+        console.log(req.params.id)
+        registrationCollection.deleteOne({_id: ObjectId(req.params.id)})
+        .then((err, result) => {
+            console.log(result);
         })
     })
 

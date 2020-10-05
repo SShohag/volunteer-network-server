@@ -54,6 +54,14 @@ client.connect(err => {
         })
        
     })
+
+    app.get('/registeredInfo', (req, res) => {
+        registrationCollection.find({})
+        .toArray((err, documents) => {
+            res.send(documents);
+        } )
+    })
+
     app.get('/registeredUser', (req, res) => {
         // console.log(req.query.email);
         registrationCollection.find({})
